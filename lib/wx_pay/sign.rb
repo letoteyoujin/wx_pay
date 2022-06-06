@@ -13,7 +13,13 @@ module WxPay
       key = params.delete("key") if params["key"] #after
 
       query = params.sort.map do |k, v|
-        "#{k}=#{v}" if v.to_s != ''
+        if v.is_a?(Hash)
+          "#{k}=#{v.to_json}"
+        elsif v.is_a?(Array)
+          "#{k}=#{v.to_json}"
+        elsif v.to_s != ''
+          "#{k}=#{v}"
+        end
       end.compact.join('&')
 
       string_sign_temp = "#{query}&key=#{key || new_key || WxPay.key}" #after
