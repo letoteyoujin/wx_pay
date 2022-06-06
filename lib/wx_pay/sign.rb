@@ -14,9 +14,16 @@ module WxPay
 
       query = params.sort.map do |k, v|
         if v.is_a?(Hash)
-          "#{k}=#{v.to_query}"
+          "#{k}={#{v.to_query}}"
         elsif v.is_a?(Array)
-          "#{k}=#{v.to_query}"
+          str = v.each do |value|
+                  if value.is_a?(Hash)
+                    "{#{value.to_query}}"
+                  else
+                    value
+                  end
+                end.compact.join(',')
+          "#{k}=#{str}"
         elsif v.to_s != ''
           "#{k}=#{v}"
         end

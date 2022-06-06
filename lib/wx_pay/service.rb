@@ -638,6 +638,22 @@ module WxPay
 
       def xmlify_payload(params, sign_type = WxPay::Sign::SIGN_TYPE_MD5)
         sign = WxPay::Sign.generate(params, sign_type)
+        params.except(:key).sort.map do |k, v|
+          if v.is_a?(Hash)
+            "<#{k}>{#{v.to_query}}</#{k}>"
+          elsif v.is_a?(Array)
+            str = v.each do |value|
+                    if value.is_a?(Hash)
+                      "{#{value.to_query}}"
+                    else
+                      value
+                    end
+                  end.compact.join(',')
+            "<#{k}>#{str}</#{k}>"
+          elsif v.to_s != ''
+            "<#{k}>#{v}</#{k}>"
+          end
+        end.compact.join('&')
         "<xml>#{params.except(:key).sort.map { |k, v| "<#{k}>#{v.is_a?(Hash) ? v.to_query : v.is_a?(Array) ? v.to_query : v }</#{k}>" }.join}<sign>#{sign}</sign></xml>"
       end
 
