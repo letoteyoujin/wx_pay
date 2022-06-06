@@ -542,6 +542,85 @@ module WxPay
       r
     end
 
+    # 多次分账
+    def self.multiprofitsharing(params, options = {})
+      params = {
+        appid: options.delete(:appid) || WxPay.appid,
+        mch_id: options.delete(:mch_id) || WxPay.mch_id,
+        nonce_str: SecureRandom.uuid.tr('-', ''),
+        key: options.delete(:key) || WxPay.key
+      }.merge(params)
+      check_required_options(params, PROFITSHARING)
+      options = {
+        ssl_client_cert: options.delete(:apiclient_cert) || WxPay.apiclient_cert,
+        ssl_client_key: options.delete(:apiclient_key) || WxPay.apiclient_key,
+        verify_ssl: OpenSSL::SSL::VERIFY_NONE
+      }.merge(options)
+      r = WxPay::Result.new(Hash.from_xml(invoke_remote("/secapi/pay/multiprofitsharing", make_payload(params, WxPay::Sign::SIGN_TYPE_HMAC_SHA256), options)))
+      yield r if block_given?
+      r
+    end
+
+    # 查询分账
+    PROFITSHARINGQUERY = [:sub_mch_id, :transaction_id, :out_order_no]
+    def self.profitsharingquery(params, options = {})
+      params = {
+        appid: options.delete(:appid) || WxPay.appid,
+        mch_id: options.delete(:mch_id) || WxPay.mch_id,
+        nonce_str: SecureRandom.uuid.tr('-', ''),
+        key: options.delete(:key) || WxPay.key
+      }.merge(params)
+      check_required_options(params, PROFITSHARINGQUERY)
+      options = {
+        ssl_client_cert: options.delete(:apiclient_cert) || WxPay.apiclient_cert,
+        ssl_client_key: options.delete(:apiclient_key) || WxPay.apiclient_key,
+        verify_ssl: OpenSSL::SSL::VERIFY_NONE
+      }.merge(options)
+      r = WxPay::Result.new(Hash.from_xml(invoke_remote("/pay/profitsharingquery", make_payload(params, WxPay::Sign::SIGN_TYPE_HMAC_SHA256), options)))
+      yield r if block_given?
+      r
+    end
+
+    # 完成分账
+    PROFITSHARINGFINISH = [:sub_mch_id, :transaction_id, :out_order_no, :description]
+    def self.profitsharingfinish(params, options = {})
+      params = {
+        appid: options.delete(:appid) || WxPay.appid,
+        mch_id: options.delete(:mch_id) || WxPay.mch_id,
+        nonce_str: SecureRandom.uuid.tr('-', ''),
+        key: options.delete(:key) || WxPay.key
+      }.merge(params)
+      check_required_options(params, PROFITSHARINGFINISH)
+      options = {
+        ssl_client_cert: options.delete(:apiclient_cert) || WxPay.apiclient_cert,
+        ssl_client_key: options.delete(:apiclient_key) || WxPay.apiclient_key,
+        verify_ssl: OpenSSL::SSL::VERIFY_NONE
+      }.merge(options)
+      r = WxPay::Result.new(Hash.from_xml(invoke_remote("/secapi/pay/profitsharingfinish", make_payload(params, WxPay::Sign::SIGN_TYPE_HMAC_SHA256), options)))
+      yield r if block_given?
+      r
+    end
+
+    # 查询订单待分账金额
+    PROFITSHARINGORDERAMOUNTQUERY = [:transaction_id]
+    def self.profitsharingorderamountquery(params, options = {})
+      params = {
+        appid: options.delete(:appid) || WxPay.appid,
+        mch_id: options.delete(:mch_id) || WxPay.mch_id,
+        nonce_str: SecureRandom.uuid.tr('-', ''),
+        key: options.delete(:key) || WxPay.key
+      }.merge(params)
+      check_required_options(params, PROFITSHARINGORDERAMOUNTQUERY)
+      options = {
+        ssl_client_cert: options.delete(:apiclient_cert) || WxPay.apiclient_cert,
+        ssl_client_key: options.delete(:apiclient_key) || WxPay.apiclient_key,
+        verify_ssl: OpenSSL::SSL::VERIFY_NONE
+      }.merge(options)
+      r = WxPay::Result.new(Hash.from_xml(invoke_remote("/pay/profitsharingorderamountquery", make_payload(params, WxPay::Sign::SIGN_TYPE_HMAC_SHA256), options)))
+      yield r if block_given?
+      r
+    end
+
     class << self
       private
 
