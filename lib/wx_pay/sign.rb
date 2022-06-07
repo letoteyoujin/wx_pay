@@ -14,11 +14,11 @@ module WxPay
 
       query = params.sort.map do |k, v|
         if v.is_a?(Hash)
-          "#{k}={#{v.to_query}}"
+          "#{k}={#{v.to_json}}"
         elsif v.is_a?(Array)
           str = v.each do |value|
                   if value.is_a?(Hash)
-                    "{#{value.to_query}}"
+                    "{#{value.to_json}}"
                   else
                     value
                   end
@@ -32,6 +32,7 @@ module WxPay
       string_sign_temp = "#{query}&key=#{key || new_key || WxPay.key}" #after
       puts key
       puts string_sign_temp
+      puts sign_type
       if sign_type == SIGN_TYPE_MD5
         Digest::MD5.hexdigest(string_sign_temp).upcase
       elsif sign_type == SIGN_TYPE_HMAC_SHA256
