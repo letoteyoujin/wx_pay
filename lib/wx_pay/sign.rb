@@ -14,11 +14,11 @@ module WxPay
 
       query = params.sort.map do |k, v|
         if v.is_a?(Hash)
-          "#{k}={#{v.to_json}}"
+          "#{k}=#{v.to_json}"
         elsif v.is_a?(Array)
           str = v.each do |value|
                   if value.is_a?(Hash)
-                    "{#{value.to_json}}"
+                    value.to_json
                   else
                     value
                   end
