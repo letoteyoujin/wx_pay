@@ -23,9 +23,6 @@ module WxPay
       end.compact.join('&')
 
       string_sign_temp = "#{query}&key=#{key || new_key || WxPay.key}" #after
-      puts key
-      puts string_sign_temp
-      puts sign_type
       if sign_type == SIGN_TYPE_MD5
         Digest::MD5.hexdigest(string_sign_temp).upcase
       elsif sign_type == SIGN_TYPE_HMAC_SHA256

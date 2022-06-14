@@ -662,9 +662,6 @@ module WxPay
         options = WxPay.extra_rest_client_options.merge(options)
         gateway_url = options.delete(:gateway_url) || get_gateway_url
         url = "#{gateway_url}#{url}"
-        puts url
-        puts payload
-        puts options
         result = RestClient::Request.execute(
           {
             method: :post,
@@ -673,7 +670,6 @@ module WxPay
             headers: { content_type: 'application/xml' }
           }.merge(options)
         )
-        puts result.inspect
         result
       end
     end
