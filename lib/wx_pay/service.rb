@@ -562,10 +562,9 @@ module WxPay
     end
 
     # 查询分账
-    PROFITSHARINGQUERY = [:sub_mch_id, :transaction_id, :out_order_no]
+    PROFITSHARINGQUERY = [:mch_id, :transaction_id, :out_order_no]
     def self.profitsharingquery(params, options = {})
       params = {
-        appid: options.delete(:appid) || WxPay.appid,
         mch_id: options.delete(:mch_id) || WxPay.mch_id,
         nonce_str: SecureRandom.uuid.tr('-', ''),
         key: options.delete(:key) || WxPay.key
@@ -582,7 +581,7 @@ module WxPay
     end
 
     # 完成分账
-    PROFITSHARINGFINISH = [:sub_mch_id, :transaction_id, :out_order_no, :description]
+    PROFITSHARINGFINISH = [:mch_id, :transaction_id, :out_order_no, :description]
     def self.profitsharingfinish(params, options = {})
       params = {
         appid: options.delete(:appid) || WxPay.appid,
